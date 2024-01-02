@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
-use App\Http\Requests\StorePersonRequest;
-use DateTime;
 use Str;
+use DateTime;
+use App\Models\Person;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StorePersonRequest;
+use Locale;
 
 class PersonController extends Controller
 {
@@ -27,13 +29,16 @@ class PersonController extends Controller
         $name = Str::upper($dataInput[0]);
         $age = $dataInput[1];
         $city = Str::upper($dataInput[2]);
+        $created_at = now()->format('Y-m-d H:i:s');
     
 
-        $person = new Person();
-        $person->name = $name;
-        $person->age =  $age;
-        $person->city = $city;
-        $person->save();
+        // $person = new Person();
+        // $person->name = $name;
+        // $person->age =  $age;
+        // $person->city = $city;
+        // $person->save();
+
+        DB::insert('INSERT INTO person (name, age, city, created_at) VALUES (?, ?, ?, ?)', [$name, $age, $city, $created_at]);
 
       
         return redirect()->back()->with('success','');

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use App\Http\Requests\StorePersonRequest;
-use App\Http\Requests\UpdatePersonRequest;
+use DateTime;
+use Str;
 
 class PersonController extends Controller
 {
@@ -13,54 +14,28 @@ class PersonController extends Controller
      */
     public function index()
     {
-        //
+        return view('add_person');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StorePersonRequest $request)
     {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Person $person)
-    {
-        //
-    }
+        $dataPerson = $request->string('input_user');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Person $person)
-    {
-        //
-    }
+        $dataInput = $dataPerson->explode(' ', PHP_INT_MAX);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePersonRequest $request, Person $person)
-    {
-        //
-    }
+        $name = Str::upper($dataInput[0]);
+        $age = $dataInput[1];
+        $city = Str::upper($dataInput[2]);
+    
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Person $person)
-    {
-        //
+        $person = new Person();
+        $person->name = $name;
+        $person->age =  $age;
+        $person->city = $city;
+        $person->save();
+
+      
+        return redirect()->back()->with('success','');
     }
 }
